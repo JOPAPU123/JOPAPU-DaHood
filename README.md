@@ -1,24 +1,48 @@
-# JOPAPU — Da Hood Tools & UI
+# JOPAPU Da Hood
 
-Набор скриптов и UI для игры Da Hood (Roblox), организованный в аккуратный репозиторий.
+## GitHub setup
 
-Особенности
-- UI-превью панели управления (оригинальные скрипты)
-- Основной модуль: сбор предметов, защиты, интеграция с aim-модулем
-- System handler для базового анти-дайта (опционально)
-- Target visuals: линии прицеливания
+1. Create a **public** GitHub repository.
+2. Upload these files to the repository root:
+   - `Main.lua`
+   - `SystemHandler.lua`
+   - `TargetAssistant.lua`
+   - `TargetVisuals.lua`
+   - `JopapuMenuPreview.lua`
+3. In `Main.lua`, replace:
 
-Установка
-1. Скопируйте файлы из папки `src/` в ваш эксплойтер/autoexec.
-2. Убедитесь, что внешние зависимости (loadstring URL) доступны.
-3. Настройте параметры в `src/Main.lua` (если нужно).
+```lua
+Owner = "YOUR_GITHUB_USERNAME"
+Name = "YOUR_REPOSITORY"
+Branch = "main"
+```
 
-Файлы
-- src/Main.lua — основная логика (оригинальный файл)
-- src/JopapuMenuPreview.lua — UI (оригинальный файл)
-- src/SystemHandler.lua — перехват __namecall и __newindex (оригинальный файл)
-- src/TargetAssistant.lua — silent aim / aimlock (оригинальный файл)
-- src/TargetVisuals.lua — визуализация прицела (оригинальный файл)
+with the repository owner, repository name, and branch containing the files.
 
-Лицензия
-Этот репозиторий по умолчанию — MIT. Измените по желанию (файл LICENSE.md).
+## Run
+
+Execute only `Main.lua`. It loads the other modules from:
+
+```text
+https://raw.githubusercontent.com/<Owner>/<Name>/<Branch>/<FileName>
+```
+
+The modules load in this order:
+
+1. `SystemHandler.lua`
+2. `TargetAssistant.lua`
+3. `TargetVisuals.lua`
+4. `JopapuMenuPreview.lua`
+
+To avoid hardcoding repository details, set the configuration before loading `Main.lua`:
+
+```lua
+getgenv().JOPAPU_REPOSITORY = {
+    Owner = "YOUR_GITHUB_USERNAME",
+    Name = "YOUR_REPOSITORY",
+    Branch = "main",
+}
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY/main/Main.lua"))()
+```
+
+Use a commit-pinned branch or tag for reproducible loading when publishing releases.
