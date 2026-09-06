@@ -308,3 +308,40 @@ function Controller.StopAll()
     end
     Controller.SetProtections(false)
 end
+
+local Repository = getgenv().JOPAPU_REPOSITORY or {
+    Owner = "JOPAPU123",
+    Name = "JOPAPU-DaHood",
+    Branch = "main",
+}
+
+local function loadRepositoryFile(fileName)
+    local url = string.format(
+        "https://raw.githubusercontent.com/%s/%s/%s/src/%s",
+        Repository.Owner,
+        Repository.Name,
+        Repository.Branch,
+        fileName
+    )
+    local source = game:HttpGetAsync(url)
+    local chunk, loadError = loadstring(source)
+    if not chunk then
+        error(string.format("By JOPAPU: failed to load %s: %s", fileName, loadError))
+    end
+    local success, runtimeError = pcall(chunk)
+    if not success then
+        error(string.format("By JOPAPU: failed to execute %s: %s", fileName, runtimeError))
+    end
+end
+
+if not getgenv().JOPAPU_MODULES_LOADED then
+    getgenv().JOPAPU_MODULES_LOADED = true
+    for _, fileName in ipairs({
+        "SystemHandler.lua",
+        "TargetAssistant.lua",
+        "TargetVisuals.lua",
+        "JopapuMenuPreview.lua",
+    }) do
+        loadRepositoryFile(fileName)
+    end
+end
